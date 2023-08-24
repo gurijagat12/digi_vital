@@ -1,6 +1,7 @@
 package ku.cwk.digivital.ui.report.view
 
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.LimitLine
@@ -15,6 +16,7 @@ import com.google.gson.Gson
 import ku.cwk.digivital.R
 import ku.cwk.digivital.databinding.ActivityReportGraphBinding
 import ku.cwk.digivital.ui.common.BaseActivity
+import ku.cwk.digivital.ui.report.view.adapter.ReportTestAdapter
 import ku.cwk.digivital.ui.track.model.data.TestReportData
 import ku.cwk.digivital.util.Constants
 import ku.cwk.digivital.util.convertDateFormat
@@ -34,8 +36,6 @@ class ReportGraphActivity : BaseActivity() {
         setContentView(binding.root)
 
         initUI()
-        initGraph()
-        showGraph()
     }
 
     private fun initUI() {
@@ -43,6 +43,25 @@ class ReportGraphActivity : BaseActivity() {
             intent.getStringExtra(Constants.INTENT_DATA),
             TestReportData::class.java
         )
+        initGraph()
+
+        reportData.valueList.reverse()
+
+        binding.apply {
+            titleTxt.text = reportData.testName
+            rangeTxt.text = getString(
+                R.string.ref_range_format,
+                reportData.refRangeI.toString(), reportData.refRangeII.toString()
+            )
+
+            reportRec.adapter = ReportTestAdapter(
+                reportData.valueList,
+                reportData.refRangeI, reportData.refRangeII
+            )
+        }
+
+        reportData.valueList.reverse()
+        showGraph()
     }
 
     //Initiate line graph
@@ -72,21 +91,20 @@ class ReportGraphActivity : BaseActivity() {
         val xAxis = chart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.setDrawGridLines(false)
-        xAxis.axisMinimum = -0.03f
+        xAxis.axisMinimum = -0.4f
         xAxis.granularity = 1f
         //xAxis.textColor = resources.getColor(R.color.teal_200, null)
 
         val listData = reportData.valueList
-        listData.reverse()
 
-        xAxis.setLabelCount(listData.size, true)
+        xAxis.setLabelCount(listData.size, false)
         xAxis.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
                 val pos = value.toInt()
                 return if (pos >= listData.size || pos < 0)
                     ""
                 else
-                    convertDateFormat(listData[pos].testDate, targetFormat = "dd\nMMM")
+                    convertDateFormat(listData[pos].testDate, targetFormat = "d MMM")
             }
         }
 
@@ -139,7 +157,7 @@ class ReportGraphActivity : BaseActivity() {
 
         val set1 = LineDataSet(values, null)
         //val color = getColor(R.color.colorGraphWeight)
-        val color = getColor(R.color.purple_700)
+        val color = getColor(R.color.teal_700)
         set1.color = color
         set1.setCircleColor(color)
         // line thickness and point size
@@ -150,8 +168,9 @@ class ReportGraphActivity : BaseActivity() {
         // text size of values
         set1.valueTextSize = 12f
         set1.valueFormatter = DecimalFormatter()
-        //TODO set1.valueTypeface = typeFaceGraphLine
-        set1.valueTextColor = resources.getColor(R.color.teal_700, null)
+        val typeFace: Typeface = Typeface.DEFAULT_BOLD
+        set1.valueTypeface = typeFace
+        set1.valueTextColor = resources.getColor(R.color.purple_700, null)
 
         // set the filled area
         set1.setDrawFilled(false)

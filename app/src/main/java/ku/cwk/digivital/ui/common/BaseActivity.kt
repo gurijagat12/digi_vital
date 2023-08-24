@@ -7,8 +7,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ku.cwk.digivital.R
 
 open class BaseActivity : AppCompatActivity() {
-    lateinit var dialogBuilder: AlertDialog.Builder
-    lateinit var progressDialog: AlertDialog
+    private lateinit var dialogBuilder: AlertDialog.Builder
+    private lateinit var progressDialog: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

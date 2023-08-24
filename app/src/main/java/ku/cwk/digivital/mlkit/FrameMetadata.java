@@ -40,31 +40,4 @@ public class FrameMetadata {
     this.height = height;
     this.rotation = rotation;
   }
-
-  /** Builder of {@link FrameMetadata}. */
-  public static class Builder {
-
-    private int width;
-    private int height;
-    private int rotation;
-
-    public Builder setWidth(int width) {
-      this.width = width;
-      return this;
-    }
-
-    public Builder setHeight(int height) {
-      this.height = height;
-      return this;
-    }
-
-    public Builder setRotation(int rotation) {
-      this.rotation = rotation;
-      return this;
-    }
-
-    public FrameMetadata build() {
-      return new FrameMetadata(width, height, rotation);
-    }
-  }
 }

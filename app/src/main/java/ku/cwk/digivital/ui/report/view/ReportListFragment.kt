@@ -14,6 +14,7 @@ import ku.cwk.digivital.ui.common.BaseFragment
 import ku.cwk.digivital.ui.report.view.adapter.ReportAdapter
 import ku.cwk.digivital.ui.report.viewmodel.ReportViewModel
 import ku.cwk.digivital.ui.track.model.data.TestReportData
+import ku.cwk.digivital.ui.track.view.TrackTestsActivity
 import ku.cwk.digivital.util.Constants
 import ku.cwk.digivital.util.NetworkHandler
 import ku.cwk.digivital.util.showAlert
@@ -51,6 +52,13 @@ class ReportListFragment : BaseFragment(), TagDataListener {
         viewModel.apply {
             viewModel.reportStatus.observe(parentActivity, dataObserver)
             viewModel.fetchReportData()
+        }
+        binding.addReportBtn.setOnClickListener {
+            parentActivity.startActivity(
+                Intent(
+                    parentActivity, TrackTestsActivity::class.java
+                )
+            )
         }
     }
 

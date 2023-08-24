@@ -9,6 +9,8 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="88dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -17,7 +19,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/cbc_txt"
+                android:id="@+id/title_txt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -33,12 +35,23 @@
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/space_high"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/cbc_txt"
-                tools:itemCount="3"
+                app:layout_constraintTop_toBottomOf="@id/title_txt"
+                tools:itemCount="4"
                 tools:listitem="@layout/item_report_list" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_report_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/space_normal"
+        android:src="@drawable/baseline_add"
+        android:tint="@color/white"
+        app:backgroundTint="@color/purple_500"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,6 +21,7 @@
     <string name="ref_range_low">Lower Limit</string>
     <string name="ref_range_high">Higher Limit</string>
     <string name="ref_range">Ref Range</string>
+    <string name="in_range">In Range</string>
     <string name="ref_range_format">%s - %s</string>
     <string name="test_cbc">Complete Blood Count - CBC</string>
     <!-- Strings for text recognition preference. -->

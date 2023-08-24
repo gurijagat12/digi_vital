@@ -25,20 +25,14 @@ import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.TextRecognizerOptionsInterface
 import ku.cwk.digivital.interfaces.MLImageData
-import ku.cwk.digivital.mlkit.PreferenceUtils
 import ku.cwk.digivital.mlkit.VisionProcessorBase
-import ku.cwk.digivital.ui.track.model.data.TestDetailData
 
 /** Processor for the text detector demo. */
 class TextRecognitionProcessor(
-    private val context: Context,
+    context: Context,
     textRecognizerOptions: TextRecognizerOptionsInterface
 ) : VisionProcessorBase<Text>(context) {
     private val textRecognizer: TextRecognizer = TextRecognition.getClient(textRecognizerOptions)
-    private val shouldGroupRecognizedTextInBlocks: Boolean =
-        PreferenceUtils.shouldGroupRecognizedTextInBlocks(context)
-    private val showLanguageTag: Boolean = PreferenceUtils.showLanguageTag(context)
-    private val showConfidence: Boolean = PreferenceUtils.shouldShowTextConfidence(context)
 
     override fun stop() {
         super.stop()
@@ -49,119 +43,11 @@ class TextRecognitionProcessor(
         return textRecognizer.process(image)
     }
 
-    override fun onSuccess(text: Text, mlImageData: MLImageData) {
+    override fun onSuccess(results: Text, mlImageData: MLImageData) {
         Log.d(TAG, "On-device Text detection successful")
         //logExtrasForTesting(text)
         //processText(text)
-        mlImageData.sendImageData(text)
-    }
-
-    private fun processText(text: Text) {
-
-        for (textBlock in text.textBlocks) { // Renders the text at the bottom of the box.
-            //Log.d(TAG, "TextBlock text is: " + textBlock.text)
-            for (line in textBlock.lines) {
-                processTest(line)
-                /*Log.d(TAG, "Line text is: " + line.text)
-                for (point in line.cornerPoints!!) {
-                    Log.v(
-                        TAG,
-                        String.format(
-                            "Corner point for element %s is located at: x - %d, y = %d",
-                            line.text,
-                            point.x,
-                            point.y
-                        )
-                    )
-                }
-                Log.d(TAG, "\n")*/
-            }
-        }
-    }
-
-    private val testList = mutableListOf<TestDetailData>()
-    private var testIndex = 0
-
-    private val testNamesList = listOf(
-
-        "Platelet count",
-        "Haematocrit",
-        "Mean cell volume",
-        "Mean cell haemoglobin level",
-        "Mean cell haemoglobin conc",
-        "Red blood cell distribution width",
-        "Mean platelet count",
-        "Neutrophil",
-        "Monocyte",
-        "Eosinophil",
-        "Basophil",
-        "Lymphocyte"
-    )
-
-    private val testUnitList = listOf(
-        "g/L",
-        "%",
-        "ratio",
-        "fL",
-        "pg",
-        "L/L"
-    )
-    var diffY = 0
-
-
-    private fun processTest(lineData: Text.Line) {
-        val text = lineData.text
-        if (
-            testNamesList.any { text.contains(it, true) }
-        ) {
-            val test = TestDetailData()
-            //Insert test name
-            test.testName = text.replace("|", "")
-            //Y Coordinate of text
-            test.yCoordinate = lineData.cornerPoints?.get(0)?.y ?: 0
-
-            testList.add(test)
-        }
-
-        if (testNamesList.isNotEmpty()) {
-            //Insert value
-            val regex12 = Regex(pattern = "10\\W12/L", options = setOf(RegexOption.IGNORE_CASE))
-            val regex9 = Regex(pattern = "10\\W9/L", options = setOf(RegexOption.IGNORE_CASE))
-
-            //check exact unit
-            val unitTextSplit = text.split(" ")
-
-            if ((text.contains(regex12) ||
-                        text.contains(regex9)) ||
-                (unitTextSplit.size > 1 && testUnitList.any { unitTextSplit[1] == it })
-            ) {
-                if (testNamesList.size > 1) {
-                    if (diffY == 0) {
-                        testList.forEachIndexed { index, testDetailData ->
-
-                            testDetailData.yCoordinate = testDetailData.yCoordinate - diffY
-
-                            /*Log.v(
-                                TAG,
-                                String.format(
-                                    "Corner point for element %s is located at: x - %d, y = %d",
-                                    testDetailData.testName,
-                                    testDetailData.yMin,
-                                    testDetailData.yMax
-                                )
-                            )*/
-                        }
-                    }
-                    /*Log.d(TAG, text)
-                    val yCoordinate = lineData.cornerPoints?.get(0)?.y ?: 0
-                    testList.find { yCoordinate > it.yCoordinate && yCoordinate < it.yMax }?.trackData?.valueText =
-                        text.replace("|", "")*/
-                } else
-                    testList[0].trackData.valueText = text.replace("|", "")
-
-                //Log.d(TAG, "\n")
-            }
-        }
+        mlImageData.sendImageData(results)
     }
 
     override fun onFailure(e: Exception) {
@@ -170,7 +56,10 @@ class TextRecognitionProcessor(
 
     companion object {
         private const val TAG = "TextRecProcessor"
-        private fun logExtrasForTesting(text: Text?) {
+    }
+
+    /*
+     private fun logExtrasForTesting(text: Text?) {
             if (text != null) {
                 Log.v(MANUAL_TESTING_LOG, "Detected text has : " + text.textBlocks.size + " blocks")
                 for (i in text.textBlocks.indices) {
@@ -222,5 +111,5 @@ class TextRecognitionProcessor(
                 }
             }
         }
-    }
+   */
 }

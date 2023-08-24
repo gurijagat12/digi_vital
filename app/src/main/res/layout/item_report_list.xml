@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -32,11 +31,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toStartOf="@id/date_txt"
+                    android:text="@string/test_name"
                     android:textAllCaps="true"
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_tiny"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:text="@string/test_name" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/date_txt"
@@ -88,6 +87,7 @@
                         android:id="@+id/value_txt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_tiny"
                         android:gravity="center"
                         android:textAllCaps="true"
                         android:textColor="@color/black"
@@ -118,6 +118,7 @@
                         android:id="@+id/range_txt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_tiny"
                         android:gravity="center"
                         android:textAllCaps="true"
                         android:textColor="@color/black"

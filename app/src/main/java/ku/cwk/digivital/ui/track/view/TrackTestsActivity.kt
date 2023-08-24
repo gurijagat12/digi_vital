@@ -22,7 +22,6 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import ku.cwk.digivital.R
 import ku.cwk.digivital.interfaces.MLImageData
 import ku.cwk.digivital.mlkit.BitmapUtils
-import ku.cwk.digivital.mlkit.GraphicOverlay
 import ku.cwk.digivital.mlkit.VisionImageProcessor
 import ku.cwk.digivital.mlkit.textdetector.TextRecognitionProcessor
 import ku.cwk.digivital.ui.common.BaseActivity
@@ -34,7 +33,6 @@ class TrackTestsActivity : BaseActivity(), MLImageData {
     private lateinit var viewModel: TrackViewModel
 
     private var preview: ImageView? = null
-    private var graphicOverlay: GraphicOverlay? = null
     private var isLandScape = false
     private var imageUri: Uri? = null
 
@@ -71,7 +69,6 @@ class TrackTestsActivity : BaseActivity(), MLImageData {
             popup.show()
         }
         preview = findViewById(R.id.preview)
-        graphicOverlay = findViewById(R.id.graphic_overlay)
 
         //populateFeatureSelector()
         //populateSizeSelector()
@@ -171,38 +168,29 @@ class TrackTestsActivity : BaseActivity(), MLImageData {
 
             val imageBitmap =
                 BitmapUtils.getBitmapFromContentUri(contentResolver, imageUri) ?: return
-            // Clear the overlay first
-            graphicOverlay!!.clear()
 
-            val resizedBitmap: Bitmap
-            resizedBitmap =
-                if (selectedSize == SIZE_ORIGINAL) {
-                    imageBitmap
-                } else {
-                    // Get the dimensions of the image view
-                    val targetedSize: Pair<Int, Int> = targetedWidthHeight
+            val resizedBitmap: Bitmap = if (selectedSize == SIZE_ORIGINAL) {
+                imageBitmap
+            } else {
+                // Get the dimensions of the image view
+                val targetedSize: Pair<Int, Int> = targetedWidthHeight
 
-                    // Determine how much to scale down the image
-                    val scaleFactor =
-                        Math.max(
-                            imageBitmap.width.toFloat() / targetedSize.first.toFloat(),
-                            imageBitmap.height.toFloat() / targetedSize.second.toFloat()
-                        )
-                    Bitmap.createScaledBitmap(
-                        imageBitmap,
-                        (imageBitmap.width / scaleFactor).toInt(),
-                        (imageBitmap.height / scaleFactor).toInt(),
-                        true
+                // Determine how much to scale down the image
+                val scaleFactor =
+                    Math.max(
+                        imageBitmap.width.toFloat() / targetedSize.first.toFloat(),
+                        imageBitmap.height.toFloat() / targetedSize.second.toFloat()
                     )
-                }
+                Bitmap.createScaledBitmap(
+                    imageBitmap,
+                    (imageBitmap.width / scaleFactor).toInt(),
+                    (imageBitmap.height / scaleFactor).toInt(),
+                    true
+                )
+            }
 
             preview!!.setImageBitmap(resizedBitmap)
             if (imageProcessor != null) {
-                graphicOverlay!!.setImageSourceInfo(
-                    resizedBitmap.width,
-                    resizedBitmap.height,
-                    /* isFlipped= */ false
-                )
                 imageProcessor!!.processBitmap(resizedBitmap, this)
             } else {
                 Log.e(
