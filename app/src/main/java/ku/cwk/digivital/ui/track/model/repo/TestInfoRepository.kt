@@ -12,7 +12,6 @@ import ku.cwk.digivital.ui.track.model.data.TestReportValueData
 import ku.cwk.digivital.ui.track.model.data.TestTrackData
 import ku.cwk.digivital.util.Constants
 import ku.cwk.digivital.util.FirebaseConstants
-import java.lang.NumberFormatException
 import kotlin.math.abs
 
 class TestInfoRepository(private val firestoreDb: FirebaseFirestore) {
@@ -67,13 +66,13 @@ class TestInfoRepository(private val firestoreDb: FirebaseFirestore) {
         return null
     }
 
-    fun addTestFirebase() {
+    /*fun addTestFirebase() {
         val testData = hashMapOf(
             "test_unit" to listOf("g/L")
         )
 
         firestoreDb.collection(FirebaseConstants.COL_BLOOD_TEST)
-            .document("Mean cell haemoglobin conc")
+            .document("Mean cell haemoglobin")
             .set(testData)
             .addOnSuccessListener {
                 Log.d(
@@ -82,9 +81,9 @@ class TestInfoRepository(private val firestoreDb: FirebaseFirestore) {
                 )
             }
             .addOnFailureListener { e -> Log.w(Constants.DIGI_PRINT, "Error writing document", e) }
-    }
+    }*/
 
-    suspend fun processText(text: Text) {
+    fun processText(text: Text): MutableList<TestDetailData> {
         testTrackList = mutableListOf()
         for (textBlock in text.textBlocks) { // Renders the text at the bottom of the box.
             //Log.d(TAG, "TextBlock text is: " + textBlock.text)
@@ -114,14 +113,15 @@ class TestInfoRepository(private val firestoreDb: FirebaseFirestore) {
                     "Test: %s -> %s",
                     test.testName,
                     test.trackData.value.toString() +
-                            "(${test.trackData.refRangeI} - ${test.trackData.refRangeII})"
+                            " (${test.trackData.refRangeI} - ${test.trackData.refRangeII})"
                 )
             )
             /*Log.d(Constants.DIGI_PRINT, "Value: " + test.trackData.valueText)
             Log.d(Constants.DIGI_PRINT, "Min: " + test.yMin)
             Log.d(Constants.DIGI_PRINT, "Max: " + test.yMax)*/
         }
-        insertTestDataFirebaseDb()
+        //insertTestDataFirebaseDb()
+        return testTrackList
     }
 
     private fun processTest(lineData: Text.Line) {
@@ -185,7 +185,8 @@ class TestInfoRepository(private val firestoreDb: FirebaseFirestore) {
                             tracker.trackData.value = unitTextSplit[0].toDouble()
                             tracker.trackData.testNameDocument = testInfo.testName
                             if (matchResult != null) {
-                                tracker.trackData.valueText = "${unitTextSplit[0]} ${unitTextSplit[1]}"
+                                tracker.trackData.valueText =
+                                    "${unitTextSplit[0]} ${unitTextSplit[1]}"
                                 checkRefRange(matchResult, tracker.trackData)
                             } else
                                 tracker.trackData.valueText = text
@@ -205,10 +206,6 @@ class TestInfoRepository(private val firestoreDb: FirebaseFirestore) {
         if (matchResult != null) {
             val rangeStart = matchResult.groupValues[1]
             val rangeEnd = matchResult.groupValues[3]
-            Log.d(
-                Constants.DIGI_PRINT,
-                "Found match Range $rangeStart to ${matchResult.value}"
-            )
             try {
                 trackData.refRangeI = rangeStart.toDouble()
                 trackData.refRangeII = rangeEnd.toDouble()
@@ -219,7 +216,8 @@ class TestInfoRepository(private val firestoreDb: FirebaseFirestore) {
     }
 
     //Insert scanned test values into Firestore Cloud DB
-    private suspend fun insertTestDataFirebaseDb(testDate: String = "2023-08-20") {
+    suspend fun insertTestDataFirebaseDb(testDate: String) {
+
         testTrackList.forEach { trackTest ->
             //Extract scanned track data
             val trackData = trackTest.trackData

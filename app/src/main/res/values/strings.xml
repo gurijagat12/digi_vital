@@ -4,12 +4,9 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <!--common text-->
-    <string name="title_activity_home">HomeActivity</string>
-    <string name="hello">Hello</string>
-    <string name="welcome_to">Welcome to JobsConnect</string>
     <string name="please_wait">Loading. Please Wait..</string>
     <string name="sorry_something_went_wrong_try">Sorry something went wrong. Please try again later.</string>
-    <string name="invalid_creds">Invalid credentials. Please try again.</string>
+    <string name="no_results">No results found. Please try again.</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="select">Select</string>
@@ -24,13 +21,12 @@
     <string name="in_range">In Range</string>
     <string name="ref_range_format">%s - %s</string>
     <string name="test_cbc">Complete Blood Count - CBC</string>
-    <!-- Strings for text recognition preference. -->
-    <string name="pref_title_group_recognized_text_in_blocks" translatable="false">Group recognized text in paragraphs</string>
-    <string name="pref_key_group_recognized_text_in_blocks" translatable="false">grtib</string>
-    <string name="pref_title_show_language_tag" translatable="false">Show language identified</string>
-    <string name="pref_key_show_language_tag" translatable="false">slt</string>
-    <string name="pref_title_show_text_confidence" translatable="false">Show confidence score</string>
-    <string name="pref_key_show_text_confidence" translatable="false">stc</string>
-    <string name="pref_key_camera_live_viewport" translatable="false">clv</string>
-    <string name="pref_key_info_hide" translatable="false">ih</string>
+    <string name="scan_camera">Scan via Camera</string>
+    <string name="scan_gallery">Scan from Gallery</string>
+    <string name="value_format">Value: %s</string>
+    <string name="value_hint">Enter new value</string>
+    <string name="choose_date">Choose Test Date</string>
+    <string name="data_saved">Data saved successfully!</string>
+    <string name="scan_values">Below are scanned test report values.\nAs these are scanned by a machine, please recheck the values and edit it, if there is a mistake.</string>
+    <string name="scan_info">-> Scan "Complete Blood Count - CBC" Blood Tests here via Camera or Gallery\n\n-> If the report is in landscape format, please rotate your device and then scan.\n\n-> The image should be vertically aligned and avoid adding rotated images.</string>
 </resources>

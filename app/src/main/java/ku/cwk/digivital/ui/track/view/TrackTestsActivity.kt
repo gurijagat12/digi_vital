@@ -1,38 +1,48 @@
 package ku.cwk.digivital.ui.track.view
 
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.ContentValues
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.icu.text.DecimalFormat
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
+import android.text.InputType
 import android.util.Pair
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewTreeObserver
-import android.widget.ImageView
-import android.widget.PopupMenu
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.textfield.TextInputEditText
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import ku.cwk.digivital.R
+import ku.cwk.digivital.databinding.ActivityTestScanBinding
 import ku.cwk.digivital.interfaces.MLImageData
 import ku.cwk.digivital.mlkit.BitmapUtils
 import ku.cwk.digivital.mlkit.VisionImageProcessor
 import ku.cwk.digivital.mlkit.textdetector.TextRecognitionProcessor
 import ku.cwk.digivital.ui.common.BaseActivity
+import ku.cwk.digivital.ui.track.view.adapter.TrackAdapter
 import ku.cwk.digivital.ui.track.viewmodel.TrackViewModel
+import ku.cwk.digivital.util.NetworkHandler
+import ku.cwk.digivital.util.showAlert
+import ku.cwk.jobsconnect.interfaces.TagDataListener
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
-class TrackTestsActivity : BaseActivity(), MLImageData {
+
+class TrackTestsActivity : BaseActivity(), MLImageData, TagDataListener {
 
     private lateinit var viewModel: TrackViewModel
-
-    private var preview: ImageView? = null
+    private lateinit var binding: ActivityTestScanBinding
+    private lateinit var trackAdapter: TrackAdapter
     private var isLandScape = false
     private var imageUri: Uri? = null
 
@@ -43,35 +53,24 @@ class TrackTestsActivity : BaseActivity(), MLImageData {
     private var imageMaxHeight = 0
     private var imageProcessor: VisionImageProcessor? = null
 
-    //TODO default values
     private var selectedMode = TEXT_RECOGNITION_LATIN
     private var selectedSize: String? = SIZE_SCREEN
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_still_image)
-        findViewById<View>(R.id.select_image_button).setOnClickListener { view: View ->
-            // Menu for selecting either: a) take new photo b) select from existing
-            val popup = PopupMenu(this@TrackTestsActivity, view)
-            popup.setOnMenuItemClickListener { menuItem: MenuItem ->
-                val itemId = menuItem.itemId
-                if (itemId == R.id.select_images_from_local) {
-                    startChooseImageIntentForResult()
-                    return@setOnMenuItemClickListener true
-                } else if (itemId == R.id.take_photo_using_camera) {
-                    startCameraIntentForResult()
-                    return@setOnMenuItemClickListener true
-                }
-                false
-            }
-            val inflater = popup.menuInflater
-            inflater.inflate(R.menu.camera_button_menu, popup.menu)
-            popup.show()
-        }
-        preview = findViewById(R.id.preview)
+        binding = ActivityTestScanBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        //populateFeatureSelector()
-        //populateSizeSelector()
+        binding.cameraBtn.setOnClickListener {
+            startCameraIntentForResult()
+        }
+
+        binding.galleryBtn.setOnClickListener {
+            startChooseImageIntentForResult()
+        }
+        binding.dateBtn.setOnClickListener {
+            chooseDate()
+        }
         isLandScape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
         if (savedInstanceState != null) {
             imageUri = savedInstanceState.getParcelable(KEY_IMAGE_URI)
@@ -80,13 +79,13 @@ class TrackTestsActivity : BaseActivity(), MLImageData {
             selectedSize = savedInstanceState.getString(KEY_SELECTED_SIZE)
         }
 
-        val rootView = findViewById<View>(R.id.root)
+        val rootView = binding.root
         rootView.viewTreeObserver.addOnGlobalLayoutListener(
             object : ViewTreeObserver.OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
                     rootView.viewTreeObserver.removeOnGlobalLayoutListener(this)
                     imageMaxWidth = rootView.width
-                    imageMaxHeight = rootView.height - findViewById<View>(R.id.control).height
+                    imageMaxHeight = rootView.height - binding.scanLay.height
                     if (SIZE_SCREEN == selectedSize) {
                         tryReloadAndDetectInImage()
                     }
@@ -98,7 +97,6 @@ class TrackTestsActivity : BaseActivity(), MLImageData {
 
     public override fun onResume() {
         super.onResume()
-        Log.d(TAG, "onResume")
         createImageProcessor()
         tryReloadAndDetectInImage()
     }
@@ -123,7 +121,6 @@ class TrackTestsActivity : BaseActivity(), MLImageData {
 
     private fun startCameraIntentForResult() { // Clean up last time's image
         imageUri = null
-        preview!!.setImageBitmap(null)
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (takePictureIntent.resolveActivity(packageManager) != null) {
             val values = ContentValues()
@@ -155,7 +152,6 @@ class TrackTestsActivity : BaseActivity(), MLImageData {
     }
 
     private fun tryReloadAndDetectInImage() {
-        Log.d(TAG, "Try reload and detect image")
         try {
             if (imageUri == null) {
                 return
@@ -177,8 +173,7 @@ class TrackTestsActivity : BaseActivity(), MLImageData {
 
                 // Determine how much to scale down the image
                 val scaleFactor =
-                    Math.max(
-                        imageBitmap.width.toFloat() / targetedSize.first.toFloat(),
+                    (imageBitmap.width.toFloat() / targetedSize.first.toFloat()).coerceAtLeast(
                         imageBitmap.height.toFloat() / targetedSize.second.toFloat()
                     )
                 Bitmap.createScaledBitmap(
@@ -189,18 +184,12 @@ class TrackTestsActivity : BaseActivity(), MLImageData {
                 )
             }
 
-            preview!!.setImageBitmap(resizedBitmap)
             if (imageProcessor != null) {
                 imageProcessor!!.processBitmap(resizedBitmap, this)
-            } else {
-                Log.e(
-                    TAG,
-                    "Null imageProcessor, please check adb logs for imageProcessor creation error"
-                )
             }
         } catch (e: IOException) {
-            Log.e(TAG, "Error retrieving saved image")
             imageUri = null
+            e.printStackTrace()
         }
     }
 
@@ -235,17 +224,9 @@ class TrackTestsActivity : BaseActivity(), MLImageData {
                 TEXT_RECOGNITION_LATIN ->
                     imageProcessor =
                         TextRecognitionProcessor(this, TextRecognizerOptions.Builder().build())
-
-                else -> Log.e(TAG, "Unknown selectedMode: $selectedMode")
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Can not create image processor: $selectedMode", e)
-            Toast.makeText(
-                applicationContext,
-                "Can not create image processor: " + e.message,
-                Toast.LENGTH_LONG
-            )
-                .show()
+            e.printStackTrace()
         }
     }
 
@@ -256,26 +237,78 @@ class TrackTestsActivity : BaseActivity(), MLImageData {
     private fun fetchTestInfo() {
         viewModel = ViewModelProvider(this)[TrackViewModel::class.java]
         viewModel.fetchTestInfo()
+        viewModel.trackStatus.observe(this, dataObserver)
+        viewModel.cloudStatus.observe(this, cloudObserver)
+    }
+
+    private val dataObserver: Observer<String> = Observer { status ->
+        when (status) {
+            NetworkHandler.STATUS_NONE -> {
+            }
+
+            NetworkHandler.STATUS_LOADING -> {
+                showProgressDialog()
+            }
+
+            NetworkHandler.STATUS_SUCCESS -> {
+                hideProgressDialog()
+                trackAdapter = TrackAdapter(viewModel.testTrackList, this)
+                binding.apply {
+                    infoTxt.visibility = View.GONE
+                    recLay.visibility = View.VISIBLE
+                    scanRec.adapter = trackAdapter
+
+                }
+            }
+
+            else -> {
+                hideProgressDialog()
+                binding.apply {
+                    infoTxt.visibility = View.VISIBLE
+                    recLay.visibility = View.GONE
+                }
+                showAlert(
+                    message = getString(R.string.no_results),
+                    isError = false
+                )
+            }
+        }
+    }
+
+    private val cloudObserver: Observer<String> = Observer { status ->
+        when (status) {
+            NetworkHandler.STATUS_NONE -> {
+            }
+
+            NetworkHandler.STATUS_LOADING -> {
+                showProgressDialog()
+            }
+
+            NetworkHandler.STATUS_SUCCESS -> {
+                hideProgressDialog()
+                val dialog = AlertDialog.Builder(this)
+                    .setMessage(getString(R.string.data_saved))
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.ok) { _, _ ->
+                        setResult(RESULT_OK)
+                        finish()
+                    }
+                    .create()
+                dialog.show()
+            }
+
+            else -> {
+                hideProgressDialog()
+                showAlert(
+                    message = getString(R.string.sorry_something_went_wrong_try),
+                    isError = false
+                )
+            }
+        }
     }
 
     companion object {
-        private const val TAG = "StillImageActivity"
-        private const val OBJECT_DETECTION = "Object Detection"
-        private const val OBJECT_DETECTION_CUSTOM = "Custom Object Detection"
-        private const val CUSTOM_AUTOML_OBJECT_DETECTION = "Custom AutoML Object Detection (Flower)"
-        private const val FACE_DETECTION = "Face Detection"
-        private const val BARCODE_SCANNING = "Barcode Scanning"
         private const val TEXT_RECOGNITION_LATIN = "Text Recognition Latin"
-        private const val TEXT_RECOGNITION_CHINESE = "Text Recognition Chinese"
-        private const val TEXT_RECOGNITION_DEVANAGARI = "Text Recognition Devanagari"
-        private const val TEXT_RECOGNITION_JAPANESE = "Text Recognition Japanese"
-        private const val TEXT_RECOGNITION_KOREAN = "Text Recognition Korean"
-        private const val IMAGE_LABELING = "Image Labeling"
-        private const val IMAGE_LABELING_CUSTOM = "Custom Image Labeling (Birds)"
-        private const val CUSTOM_AUTOML_LABELING = "Custom AutoML Image Labeling (Flower)"
-        private const val POSE_DETECTION = "Pose Detection"
-        private const val SELFIE_SEGMENTATION = "Selfie Segmentation"
-        private const val FACE_MESH_DETECTION = "Face Mesh Detection (Beta)"
 
         private const val SIZE_SCREEN = "w:screen" // Match screen width
         private const val SIZE_1024_768 = "w:1024" // ~1024*768 in a normal ratio
@@ -291,5 +324,47 @@ class TrackTestsActivity : BaseActivity(), MLImageData {
 
     override fun sendImageData(imageData: Text) {
         viewModel.processMLImageData(imageData)
+    }
+
+    override fun sendData(tag: String, data: Any?) {
+        val testData = viewModel.testTrackList[data as Int]
+
+        val inputEditTextField = TextInputEditText(this)
+        inputEditTextField.hint = getString(R.string.value_hint)
+        inputEditTextField.inputType =
+            InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+
+        val dialog = AlertDialog.Builder(this)
+            .setTitle(testData.testName)
+            .setMessage(getString(R.string.value_format, testData.trackData.value.toString()))
+            .setView(inputEditTextField)
+            .setPositiveButton(R.string.ok) { _, _ ->
+                val editTextInput = inputEditTextField.text.toString()
+                testData.trackData.valueText = testData.trackData.valueText.replace(
+                    DecimalFormat("0.#").format(testData.trackData.value),
+                    editTextInput
+                )
+                testData.trackData.value = editTextInput.toDouble()
+                trackAdapter.notifyItemChanged(data)
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .create()
+        dialog.show()
+    }
+
+    private fun chooseDate() {
+        val c = Calendar.getInstance()
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+
+
+        val dpd = DatePickerDialog(this, { _, year, monthOfYear, dayOfMonth ->
+            c.set(year, monthOfYear, dayOfMonth)
+            val testDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(c.time)
+            viewModel.saveTrackData(testDate)
+        }, year, month, day)
+
+        dpd.show()
     }
 }

@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
@@ -25,6 +27,11 @@ class ReportListFragment : BaseFragment(), TagDataListener {
     private var _binding: FragmentReportListBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: ReportViewModel
+    private val trackResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == AppCompatActivity.RESULT_OK)
+                viewModel.fetchReportData()
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,11 +57,11 @@ class ReportListFragment : BaseFragment(), TagDataListener {
     private fun initUI() {
         viewModel = ViewModelProvider(this)[ReportViewModel::class.java]
         viewModel.apply {
-            viewModel.reportStatus.observe(parentActivity, dataObserver)
-            viewModel.fetchReportData()
+            reportStatus.observe(parentActivity, dataObserver)
+            fetchReportData()
         }
         binding.addReportBtn.setOnClickListener {
-            parentActivity.startActivity(
+            trackResult.launch(
                 Intent(
                     parentActivity, TrackTestsActivity::class.java
                 )

@@ -27,5 +27,6 @@ class NetworkHandler {
         const val STATUS_LOADING = "LOADING"
         const val STATUS_SUCCESS = "SUCCESS"
         const val STATUS_ERROR = "ERROR"
+        const val STATUS_EMPTY = "EMPTY"
     }
 }
