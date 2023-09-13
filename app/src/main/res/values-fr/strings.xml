@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Suivi DigiVital</string>
+    <string name="title_home">Rapports</string>
+    <string name="title_settings">Paramètres</string>
+    <!--common text-->
+    <string name="please_wait">Chargement. Veuillez patienter...</string>
+    <string name="sorry_something_went_wrong_try">Désolé, quelque chose s\'est mal passé. Veuillez réessayer plus tard.</string>
+    <string name="no_results">Aucun résultat trouvé. Veuillez réessayer.</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Annuler</string>
+    <string name="select">Sélectionner</string>
+    <string name="done">Terminé</string>
+    <!--Test Reports-->
+    <string name="test_name">Nom du test</string>
+    <string name="test_date">Date du test</string>
+    <string name="test_result">Résultat</string>
+    <string name="ref_range_low">Limite inférieure</string>
+    <string name="ref_range_high">Limite supérieure</string>
+    <string name="ref_range">Plage de référence</string>
+    <string name="in_range">Dans la plage</string>
+    <string name="ref_range_format">%s - %s</string>
+    <string name="test_cbc">Numération sanguine complète - CBC</string>
+    <string name="scan_camera">Scanner via l\'appareil photo</string>
+    <string name="scan_gallery">Scanner depuis la galerie</string>
+    <string name="value_format">Valeur : %s</string>
+    <string name="value_hint">Entrez une nouvelle valeur</string>
+    <string name="choose_date">Choisissez la date du test</string>
+    <string name="data_saved">Données enregistrées avec succès !</string>
+    <string name="lang_choose">Choisissez la langue</string>
+    <string name="scan_values">Voici les valeurs du rapport de test numérisées.\nComme elles ont été numérisées par une machine, veuillez vérifier les valeurs et les modifier en cas d\'erreur.</string>
+    <string name="scan_info">-> Numériser ici les tests sanguins "Numération sanguine complète - CBC" via l\'appareil photo ou la galerie\n\n-> Si le rapport est au format paysage, veuillez faire pivoter votre appareil avant de numériser.\n\n-> L\'image doit être alignée verticalement et éviter d\'ajouter des images pivotées.</string>
+</resources>

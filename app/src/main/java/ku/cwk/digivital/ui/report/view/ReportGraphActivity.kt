@@ -87,7 +87,7 @@ class ReportGraphActivity : BaseActivity() {
     }
 
     private fun showGraph() {
-// // X-Axis Style // //
+        // // X-Axis Style // //
         val xAxis = chart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.setDrawGridLines(false)
@@ -107,7 +107,6 @@ class ReportGraphActivity : BaseActivity() {
                     convertDateFormat(listData[pos].testDate, targetFormat = "d MMM")
             }
         }
-
         // // Y-Axis Style // //
         chart.axisLeft
 
@@ -116,8 +115,6 @@ class ReportGraphActivity : BaseActivity() {
 
         chart.axisLeft.isEnabled = true
         //chart.axisLeft.axisMinimum = 20f
-
-        ////////////////////////////////////////////////////////////////
 
         val ll2 = LimitLine(reportData.refRangeI.toFloat(), getString(R.string.ref_range_low))
         ll2.lineWidth = 2f
@@ -130,12 +127,6 @@ class ReportGraphActivity : BaseActivity() {
         ll1.enableDashedLine(25f, 10f, 0f)
         ll1.labelPosition = LimitLabelPosition.RIGHT_TOP
         ll1.textSize = 8f
-        //ll1.typeface = tfRegular
-        //ll2.typeface = tfRegular
-
-        // draw limit lines behind data instead of on top
-
-        // draw limit lines behind data instead of on top
         chart.axisLeft.setDrawLimitLinesBehindData(true)
         xAxis.setDrawLimitLinesBehindData(true)
 
@@ -146,8 +137,6 @@ class ReportGraphActivity : BaseActivity() {
 
         chart.axisLeft.axisMinimum = reportData.refRangeI.toFloat() - 10f
         chart.axisLeft.axisMaximum = reportData.refRangeII.toFloat() + 10f
-
-        //////////////////////////////////////////////////////////////////
 
         //setData
         val values = ArrayList<Entry>()
@@ -188,7 +177,6 @@ class ReportGraphActivity : BaseActivity() {
         // get the legend (only possible after setting data)
         chart.legend.isEnabled = false
     }
-
     class DecimalFormatter : ValueFormatter() {
         override fun getFormattedValue(value: Float): String {
             return DecimalFormat("#.#").format(value)

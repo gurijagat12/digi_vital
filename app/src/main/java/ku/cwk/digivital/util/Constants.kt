@@ -7,6 +7,9 @@ class Constants {
         //print objects
         const val DIGI_PRINT = "DigiVitalPrint"
 
+        //persistent storage
+        const val APP_PREF_LANGUAGE = "dgv_pref_lang"
+
         //Regex for range
         const val REGEX_REF_RANGE =
             "^\\W((\\d{1,2}\\.\\d\\-\\d{1,2}\\.\\d|\\d{2,3}\\-\\d{3})|\\d\\.\\d{3}\\-\\d\\.\\d{3})\\W\$"

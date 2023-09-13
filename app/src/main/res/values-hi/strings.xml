@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">डिजिवाइटल ट्रैकिंग</string>
+    <string name="title_home">रिपोर्ट्स</string>
+    <string name="title_settings">समायोजन</string>
+    <!--common text-->
+    <string name="please_wait">लोड हो रहा है। कृपया प्रतीक्षा करें..</string>
+    <string name="sorry_something_went_wrong_try">माफ़ कीजिये, कुछ गड़बड़ हो गई है। कृपया थोड़ी देर बाद पुन: प्रयास करें।</string>
+    <string name="no_results">कोई परिणाम नहीं मिला। कृपया पुनः प्रयास करें।</string>
+    <string name="ok">ठीक है</string>
+    <string name="cancel">रद्द करें</string>
+    <string name="select">चुनें</string>
+    <string name="done">किया हुआ</string>
+    <!--Test Reports-->
+    <string name="test_name">टेस्ट नाम</string>
+    <string name="test_date">टेस्ट तारीख</string>
+    <string name="test_result">परिणाम</string>
+    <string name="ref_range_low">न्यूनतम सीमा</string>
+    <string name="ref_range_high">अधिकतम सीमा</string>
+    <string name="ref_range">संदर्भ सीमा</string>
+    <string name="in_range">सीमा के अंदर</string>
+    <string name="ref_range_format">%s - %s</string>
+    <string name="test_cbc">पूर्ण रक्त गणना - CBC</string>
+    <string name="scan_camera">कैमरा के माध्यम से स्कैन करें</string>
+    <string name="scan_gallery">गैलरी से स्कैन करें</string>
+    <string name="value_format">मूल्य: %s</string>
+    <string name="value_hint">नई मूल्य दर्ज करें</string>
+    <string name="choose_date">टेस्ट तारीख चुनें</string>
+    <string name="data_saved">डेटा सफलतापूर्वक सहेजा गया है!</string>
+    <string name="lang_choose">भाषा चुनें</string>
+    <string name="scan_values">नीचे स्कैन की गई टेस्ट रिपोर्ट मूल्य हैं।\nक्योंकि ये मशीन द्वारा स्कैन किए गए हैं, कृपया मूल्यों की पुनरावलोकन करें और यदि कोई गलती है, तो संपादित करें।</string>
+    <string name="scan_info">-> कैमरा या गैलरी के माध्यम से "पूर्ण रक्त गणना - CBC" रक्त परीक्षण को यहां स्कैन करें\n\n-> यदि रिपोर्ट लैंडस्केप प्रारूप में है, तो कृपया अपने डिवाइस को घुमाएं और फिर से स्कैन करें।\n\n-> छवि को उद्धारणीय ढंग से लागू करें और पलटी हुई छवियों को न डालें।</string>
+</resources>

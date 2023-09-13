@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">DigiVital Tracking</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="version" translatable="false">Version: 1.0</string>
+    <string name="title_home">Reports</string>
+    <string name="title_settings">Settings</string>
     <!--common text-->
     <string name="please_wait">Loading. Please Wait..</string>
     <string name="sorry_something_went_wrong_try">Sorry something went wrong. Please try again later.</string>
@@ -29,4 +29,6 @@
     <string name="data_saved">Data saved successfully!</string>
     <string name="scan_values">Below are scanned test report values.\nAs these are scanned by a machine, please recheck the values and edit it, if there is a mistake.</string>
     <string name="scan_info">-> Scan "Complete Blood Count - CBC" Blood Tests here via Camera or Gallery\n\n-> If the report is in landscape format, please rotate your device and then scan.\n\n-> The image should be vertically aligned and avoid adding rotated images.</string>
+    <string name="lang_choose">Choose Language</string>
+
 </resources>

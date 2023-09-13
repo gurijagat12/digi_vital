@@ -89,20 +89,6 @@ class TestInfoRepository(private val firestoreDb: FirebaseFirestore) {
             //Log.d(TAG, "TextBlock text is: " + textBlock.text)
             for (line in textBlock.lines) {
                 processTest(line)
-
-                /*Log.d(Constants.DIGI_PRINT, "Line text is: " + line.text)
-                for (point in line.cornerPoints!!) {
-                    Log.v(
-                        Constants.DIGI_PRINT,
-                        String.format(
-                            "Corner point for element %s is located at: x - %d, y = %d",
-                            line.text,
-                            point.x,
-                            point.y
-                        )
-                    )
-                }
-                Log.d(Constants.DIGI_PRINT, "\n")*/
             }
         }
         testTrackList.removeAll { it.trackData.valueText.isEmpty() }
@@ -116,11 +102,7 @@ class TestInfoRepository(private val firestoreDb: FirebaseFirestore) {
                             " (${test.trackData.refRangeI} - ${test.trackData.refRangeII})"
                 )
             )
-            /*Log.d(Constants.DIGI_PRINT, "Value: " + test.trackData.valueText)
-            Log.d(Constants.DIGI_PRINT, "Min: " + test.yMin)
-            Log.d(Constants.DIGI_PRINT, "Max: " + test.yMax)*/
         }
-        //insertTestDataFirebaseDb()
         return testTrackList
     }
 

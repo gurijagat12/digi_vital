@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">DigiVital Verfolgung</string>
+    <string name="title_home">Berichte</string>
+    <string name="title_settings">Einstellungen</string>
+    <!-- common text -->
+    <string name="please_wait">Laden. Bitte warten...</string>
+    <string name="sorry_something_went_wrong_try">Entschuldigung, etwas ist schiefgelaufen. Bitte versuchen Sie es später erneut.</string>
+    <string name="no_results">Keine Ergebnisse gefunden. Bitte versuchen Sie es erneut.</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="select">Auswählen</string>
+    <string name="done">Fertig</string>
+    <!-- Test Reports -->
+    <string name="test_name">Testname</string>
+    <string name="test_date">Testdatum</string>
+    <string name="test_result">Ergebnis</string>
+    <string name="ref_range_low">Untere Grenze</string>
+    <string name="ref_range_high">Obere Grenze</string>
+    <string name="ref_range">Referenzbereich</string>
+    <string name="in_range">Im Bereich</string>
+    <string name="ref_range_format">%s - %s</string>
+    <string name="test_cbc">Vollständiges Blutbild - CBC</string>
+    <string name="scan_camera">Über Kamera scannen</string>
+    <string name="scan_gallery">Aus Galerie scannen</string>
+    <string name="value_format">Wert: %s</string>
+    <string name="value_hint">Neuen Wert eingeben</string>
+    <string name="choose_date">Testdatum auswählen</string>
+    <string name="lang_choose">Sprache wählen</string>
+    <string name="data_saved">Daten erfolgreich gespeichert!</string>
+    <string name="scan_values">Hier sind gescannte Testberichtswerte.\nDa diese von einer Maschine gescannt wurden, überprüfen Sie die Werte bitte erneut und korrigieren Sie sie, wenn ein Fehler vorliegt.</string>
+    <string name="scan_info">-> Blutuntersuchungen "Vollständiges Blutbild - CBC" hier über die Kamera oder die Galerie scannen\n\n-> Wenn der Bericht im Querformat vorliegt, drehen Sie bitte Ihr Gerät und scannen Sie dann.\n\n-> Das Bild sollte vertikal ausgerichtet sein und das Hinzufügen von gedrehten Bildern vermeiden.</string>
+</resources>
