@@ -81,8 +81,14 @@ class ReportListFragment : BaseFragment(), TagDataListener {
             NetworkHandler.STATUS_SUCCESS -> {
                 hideProgressDialog()
                 binding.apply {
-                    reportRec.adapter =
-                        ReportAdapter(viewModel.reportList, this@ReportListFragment)
+                    emptyTv.visibility = if (viewModel.reportList.isEmpty())
+                        View.VISIBLE
+                    else {
+                        reportRec.adapter =
+                            ReportAdapter(viewModel.reportList, this@ReportListFragment)
+
+                        View.GONE
+                    }
                 }
             }
 

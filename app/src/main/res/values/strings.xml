@@ -12,6 +12,7 @@
     <string name="select">Select</string>
     <string name="done">Done</string>
     <!--Test Reports-->
+    <string name="report_not_avail" translatable="false">No reports available.\nTap on \'+\' button to scan and add reports</string>
     <string name="test_name">Test Name</string>
     <string name="test_date">Test Date</string>
     <string name="test_result">Result</string>

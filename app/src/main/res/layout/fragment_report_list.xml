@@ -6,6 +6,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/empty_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/space_normal"
+        android:gravity="end"
+        android:text="@string/report_not_avail"
+        app:layout_constraintBottom_toBottomOf="@id/add_report_btn"
+        app:layout_constraintEnd_toStartOf="@id/add_report_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/add_report_btn" />
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -36,7 +48,7 @@
                 android:paddingHorizontal="@dimen/space_high"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@id/title_txt"
-                tools:itemCount="4"
+                tools:itemCount="0"
                 tools:listitem="@layout/item_report_list" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
