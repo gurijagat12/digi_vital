@@ -155,13 +155,14 @@ class TestInfoRepository(private val firestoreDb: FirebaseFirestore) {
 
                 if (testInfo != null) {
                     //Step II - match unit
-                    if (testInfo.testInfoData.testUnitList.any { it == unitTextSplit[1] } ||
-                        text.contains(
-                            Regex(
-                                pattern = testInfo.testInfoData.testRegex,
-                                options = setOf(RegexOption.IGNORE_CASE)
-                            )
-                        )
+                    if (unitTextSplit.size > 1 && testInfo.testInfoData.testUnitList.any { it == unitTextSplit[1] } ||
+                        (testInfo.testInfoData.testRegex.isNotEmpty() &&
+                                text.contains(
+                                    Regex(
+                                        pattern = testInfo.testInfoData.testRegex,
+                                        options = setOf(RegexOption.IGNORE_CASE)
+                                    )
+                                ))
                     ) {
                         try {
                             tracker.trackData.value = unitTextSplit[0].toDouble()
@@ -177,7 +178,7 @@ class TestInfoRepository(private val firestoreDb: FirebaseFirestore) {
                             e.printStackTrace()
                         }
 
-                    } else if (tracker.trackData.value != 0.0)
+                    } else if (tracker.trackData.value != 0.0 && matchResult != null)
                         checkRefRange(matchResult, tracker.trackData)
                 }
             }

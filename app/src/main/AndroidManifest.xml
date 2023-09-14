@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
+        android:name=".ui.common.BaseApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -36,11 +37,11 @@
 
         <activity
             android:name=".ui.track.view.TrackTestsActivity"
-            android:exported="false"/>
+            android:exported="true" />
 
         <activity
             android:name=".ui.report.view.ReportGraphActivity"
-            android:exported="false" />
+            android:exported="true" />
 
     </application>
 

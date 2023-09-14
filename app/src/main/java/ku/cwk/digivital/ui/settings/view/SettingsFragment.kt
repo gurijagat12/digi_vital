@@ -8,10 +8,13 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.content.Context
+import androidx.preference.PreferenceManager
 import ku.cwk.digivital.databinding.FragmentSettingsBinding
+import ku.cwk.digivital.ui.common.BaseActivity
 import ku.cwk.digivital.ui.common.BaseFragment
 import ku.cwk.digivital.ui.home.view.MainActivity
 import ku.cwk.digivital.util.Constants
+import java.util.Locale
 
 class SettingsFragment : BaseFragment() {
 
@@ -77,16 +80,17 @@ class SettingsFragment : BaseFragment() {
     //Save and Fetch Language Code
 
     private fun saveLanguage(languageCode: String) {
-        val sharedPref = parentActivity.getPreferences(Context.MODE_PRIVATE)
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(parentActivity)
         sharedPref?.edit()?.putString(Constants.APP_PREF_LANGUAGE, languageCode)?.apply()
+        BaseActivity.dLocale = Locale(languageCode)
+        parentActivity.finishAffinity()
         parentActivity.startActivity(
             Intent(parentActivity, MainActivity::class.java)
         )
-        parentActivity.finish()
     }
 
     private fun fetchLanguage(): String {
-        val sharedPref = parentActivity.getPreferences(Context.MODE_PRIVATE)
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(parentActivity)
         return sharedPref?.getString(Constants.APP_PREF_LANGUAGE, "en") ?: "en"
     }
 }

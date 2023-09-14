@@ -2,13 +2,12 @@ package ku.cwk.digivital.ui.common
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ku.cwk.digivital.R
 import java.util.Locale
-import android.content.Context
-import ku.cwk.digivital.util.Constants
 
 @Suppress("DEPRECATION")
 open class BaseActivity : AppCompatActivity() {
@@ -17,11 +16,6 @@ open class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        //Apply language code to all screens
-        val languageCode =
-            getPreferences(Context.MODE_PRIVATE).getString(Constants.APP_PREF_LANGUAGE, "en") ?: "en"
-        setLocale(languageCode)
 
         dialogBuilder = MaterialAlertDialogBuilder(this)
             .setView(R.layout.layout_loading)
@@ -38,12 +32,22 @@ open class BaseActivity : AppCompatActivity() {
         }
     }
 
-    private fun setLocale(languageCode: String) {
-        val locale = Locale(languageCode)
-        Locale.setDefault(locale)
-        val config = Configuration()
-        config.locale = locale
-        resources.updateConfiguration(config, resources.displayMetrics)
+    companion object {
+        var dLocale: Locale? = null
+    }
+
+    init {
+        updateConfig(this)
+    }
+
+    fun updateConfig(wrapper: ContextThemeWrapper) {
+        if (dLocale == Locale("")) // Do nothing if dLocale is null
+            return
+
+        Locale.setDefault(dLocale)
+        val configuration = Configuration()
+        configuration.setLocale(dLocale)
+        wrapper.applyOverrideConfiguration(configuration)
     }
 
     /*fun handleError(status: String): Boolean {

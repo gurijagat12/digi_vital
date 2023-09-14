@@ -57,6 +57,11 @@ class TrackTestsActivity : BaseActivity(), MLImageData, TagDataListener {
     private var selectedSize: String? = SIZE_SCREEN
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val locale = Locale("hi")
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.locale = locale
+        resources.updateConfiguration(config, resources.displayMetrics)
         super.onCreate(savedInstanceState)
         binding = ActivityTestScanBinding.inflate(layoutInflater)
         setContentView(binding.root)
