@@ -38,6 +38,7 @@ import java.util.Calendar
 import java.util.Locale
 
 
+@Suppress("DEPRECATION")
 class TrackTestsActivity : BaseActivity(), MLImageData, TagDataListener {
 
     private lateinit var viewModel: TrackViewModel
@@ -57,11 +58,6 @@ class TrackTestsActivity : BaseActivity(), MLImageData, TagDataListener {
     private var selectedSize: String? = SIZE_SCREEN
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val locale = Locale("hi")
-        Locale.setDefault(locale)
-        val config = Configuration()
-        config.locale = locale
-        resources.updateConfiguration(config, resources.displayMetrics)
         super.onCreate(savedInstanceState)
         binding = ActivityTestScanBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -364,8 +360,8 @@ class TrackTestsActivity : BaseActivity(), MLImageData, TagDataListener {
         val day = c.get(Calendar.DAY_OF_MONTH)
 
 
-        val dpd = DatePickerDialog(this, { _, year, monthOfYear, dayOfMonth ->
-            c.set(year, monthOfYear, dayOfMonth)
+        val dpd = DatePickerDialog(this, { _, yearPicker, monthOfYear, dayOfMonth ->
+            c.set(yearPicker, monthOfYear, dayOfMonth)
             val testDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(c.time)
             viewModel.saveTrackData(testDate)
         }, year, month, day)

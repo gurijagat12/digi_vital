@@ -10,10 +10,10 @@ class BaseApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        var change = ""
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val languageCode = sharedPreferences.getString(Constants.APP_PREF_LANGUAGE, "en")
+        val languageCode =
+            sharedPreferences.getString(Constants.APP_PREF_LANGUAGE, "en") ?: "en"
 
-        BaseActivity.dLocale = Locale(languageCode) //set any locale you want here
+        BaseActivity.dLocale = Locale(languageCode) //set any locale here
     }
 }

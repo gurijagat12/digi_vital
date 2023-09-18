@@ -66,23 +66,6 @@ class TestInfoRepository(private val firestoreDb: FirebaseFirestore) {
         return null
     }
 
-    /*fun addTestFirebase() {
-        val testData = hashMapOf(
-            "test_unit" to listOf("g/L")
-        )
-
-        firestoreDb.collection(FirebaseConstants.COL_BLOOD_TEST)
-            .document("Mean cell haemoglobin")
-            .set(testData)
-            .addOnSuccessListener {
-                Log.d(
-                    Constants.DIGI_PRINT,
-                    "DocumentSnapshot successfully written!"
-                )
-            }
-            .addOnFailureListener { e -> Log.w(Constants.DIGI_PRINT, "Error writing document", e) }
-    }*/
-
     fun processText(text: Text): MutableList<TestDetailData> {
         testTrackList = mutableListOf()
         for (textBlock in text.textBlocks) { // Renders the text at the bottom of the box.
@@ -241,3 +224,19 @@ class TestInfoRepository(private val firestoreDb: FirebaseFirestore) {
         }
     }
 }
+/*fun addTestFirebase() {
+        val testData = hashMapOf(
+            "test_unit" to listOf("g/L")
+        )
+
+        firestoreDb.collection(FirebaseConstants.COL_BLOOD_TEST)
+            .document("Mean cell haemoglobin")
+            .set(testData)
+            .addOnSuccessListener {
+                Log.d(
+                    Constants.DIGI_PRINT,
+                    "DocumentSnapshot successfully written!"
+                )
+            }
+            .addOnFailureListener { e -> Log.w(Constants.DIGI_PRINT, "Error writing document", e) }
+    }*/

@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">DigiVital Tracking</string>
+    <string name="version" translatable="false">Version: 1.0</string>
+    <string name="title_home">Reports</string>
+    <string name="title_settings">Settings</string>
+    <!--common text-->
+    <string name="please_wait">Loading. Please Wait..</string>
+    <string name="sorry_something_went_wrong_try">Sorry something went wrong. Please try again later.</string>
+    <string name="no_results">No results found. Please try again.</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="select">Select</string>
+    <string name="done">Done</string>
+    <!--Test Reports-->
+    <string name="report_not_avail" translatable="false">No reports available.\nTap on \'+\' button to scan and add reports</string>
+    <string name="test_name">Test Name</string>
+    <string name="test_date">Test Date</string>
+    <string name="test_result">Result</string>
+    <string name="ref_range_low">Lower Limit</string>
+    <string name="ref_range_high">Higher Limit</string>
+    <string name="ref_range">Ref Range</string>
+    <string name="in_range">In Range</string>
+    <string name="ref_range_format">%s - %s</string>
+    <string name="test_cbc">Complete Blood Count - CBC</string>
+    <string name="scan_camera">Scan via Camera</string>
+    <string name="scan_gallery">Scan from Gallery</string>
+    <string name="value_format">Value: %s</string>
+    <string name="value_hint">Enter new value</string>
+    <string name="choose_date">Choose Test Date</string>
+    <string name="data_saved">Data saved successfully!</string>
+    <string name="scan_values">Below are scanned test report values.\nAs these are scanned by a machine, please recheck the values and edit it, if there is a mistake.</string>
+    <string name="scan_info">-> Scan "Complete Blood Count - CBC" Blood Tests here via Camera or Gallery\n\n-> If the report is in landscape format, please rotate your device and then scan.\n\n-> The image should be vertically aligned and avoid adding rotated images.</string>
+    <string name="lang_choose">Choose Language</string>
+
+</resources>
